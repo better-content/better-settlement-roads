@@ -2,9 +2,9 @@
 
 ## Project identity
 
-- Repository and artifact: `settlement-roads`
-- Mod ID and resource namespace: `settlement_roads`
-- Base package: `com.bettercontent.settlementroads`
+- Repository and artifact: `better-settlement-roads`
+- Mod ID and resource namespace: `better_settlement_roads`
+- Base package: `com.bettercontent.bettersettlementroads`
 - Java: 17
 - Forge: 1.20.1-47.4.13
 

@@ -9,7 +9,7 @@
 
 ## 2. Repository Adoption Notes
 
-- The repository now uses the target namespace `settlement_roads` in Gradle metadata, source packages, resources, and command registration.
+- The repository now uses the target namespace `better_settlement_roads` in Gradle metadata, source packages, resources, and command registration.
 - The implemented supported slice covers planner-domain and persistence code, dry terrain-aware routing, debug commands, deterministic JVM tests, and GameTests.
 - Bridge planning and placement code exists only as dormant experimental scaffolding. The supported configuration keeps `allow_water_bridges` false; bridge-specific tests enable it only to isolate that code.
 
@@ -495,10 +495,10 @@ Use exact block snapshots only for small synthetic scenes.
 Add debug commands with deterministic scene control:
 
 ```text
-/settlement_roads debug spawn_scenario <id>
-/settlement_roads debug plan_here
-/settlement_roads debug place_here
-/settlement_roads debug clear_here
+/better_settlement_roads debug spawn_scenario <id>
+/better_settlement_roads debug plan_here
+/better_settlement_roads debug place_here
+/better_settlement_roads debug clear_here
 ```
 
 Purpose:

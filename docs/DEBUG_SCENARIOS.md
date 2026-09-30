@@ -4,7 +4,7 @@ This file tracks the deterministic scenario inventory used by GameTests, debug c
 
 Namespace note:
 
-- Command examples use the target namespace `settlement_roads` from the project spec.
+- Command examples use the target namespace `better_settlement_roads` from the project spec.
 - The current implementation already registers commands under that namespace.
 
 ## Commands
@@ -12,10 +12,10 @@ Namespace note:
 Expected debug command surface:
 
 ```text
-/settlement_roads debug spawn_scenario <id>
-/settlement_roads debug plan_here
-/settlement_roads debug place_here
-/settlement_roads debug clear_here
+/better_settlement_roads debug spawn_scenario <id>
+/better_settlement_roads debug plan_here
+/better_settlement_roads debug place_here
+/better_settlement_roads debug clear_here
 ```
 
 ## Scenario List

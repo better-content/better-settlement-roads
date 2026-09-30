@@ -7,5 +7,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "settlement-roads"
+rootProject.name = "better-settlement-roads"
 

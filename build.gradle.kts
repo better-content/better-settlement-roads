@@ -26,7 +26,7 @@ group = property("mod_group") as String
 version = modVersion
 
 base {
-    archivesName.set("settlement-roads")
+    archivesName.set("better-settlement-roads")
 }
 
 fun deobf(notation: String): Any =
@@ -170,8 +170,8 @@ jacoco {
 
 val coveredPlannerFiles = sourceSets.main.get().output.classesDirs.asFileTree.matching {
     include(
-        "com/bettercontent/settlementroads/planner/**/*.class",
-        "com/bettercontent/settlementroads/data/**/*.class"
+        "com/bettercontent/bettersettlementroads/planner/**/*.class",
+        "com/bettercontent/bettersettlementroads/data/**/*.class"
     )
 }
 
@@ -191,7 +191,7 @@ val verifyCoverageInputs by tasks.registering {
     doLast {
         val selected = tasks.jacocoTestReport.get().classDirectories.asFileTree.files
         for (scope in listOf("planner", "data")) {
-            check(selected.any { it.invariantSeparatorsPath.contains("/com/bettercontent/settlementroads/$scope/") }) {
+            check(selected.any { it.invariantSeparatorsPath.contains("/com/bettercontent/bettersettlementroads/$scope/") }) {
                 "Coverage selection is missing expected classes in $scope"
             }
         }
@@ -227,7 +227,7 @@ tasks.jacocoTestCoverageVerification {
             if (executable) klass.getAttribute("name").replace('/', '.') else null
         }
         for (scope in listOf("planner", "data")) {
-            check(executableClasses.any { it.startsWith("com.bettercontent.settlementroads.$scope.") }) {
+            check(executableClasses.any { it.startsWith("com.bettercontent.bettersettlementroads.$scope.") }) {
                 "Coverage report is missing executable counters in $scope"
             }
         }

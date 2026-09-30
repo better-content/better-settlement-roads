@@ -12,10 +12,10 @@
 ### Changed
 
 - Restored complete three-wide dirt-path and gravel roads with deterministic sparse coarse-dirt edge detail; stone palettes remain bridge-only.
-- Renamed the codebase from the template namespace to the `settlement_roads` mod namespace
+- Renamed the codebase from the template namespace to the `better_settlement_roads` mod namespace
 - Added repo execution notes for tests, GameTests, and datagen entry points
 - Removed the legacy `fissionreactor` code and assets instead of excluding them from the build
-- Trimmed the Gradle configuration and mod metadata down to the dependencies used by `settlement_roads`
+- Trimmed the Gradle configuration and mod metadata down to the dependencies used by `better_settlement_roads`
 
 ### Implemented
 
@@ -31,6 +31,6 @@
 
 ### Identity normalization
 
-- Standardized the project as **Settlement Roads** with mod ID `settlement_roads`, artifact `settlement-roads`, and package `com.bettercontent.settlementroads`.
+- Standardized the project as **Settlement Roads** with mod ID `better_settlement_roads`, artifact `better-settlement-roads`, and package `com.bettercontent.bettersettlementroads`.
 - Adopted Java 17 and Forge 1.20.1-47.4.13 as the build baseline without changing the project version.
 - This is a clean break; legacy worlds, configurations, and integrations are not migrated.

@@ -1,4 +1,4 @@
-# Settlement Roads
+# Better Settlement Roads
 
 Deterministic, scenario-driven settlement road planning for Forge 1.20.1.
 
@@ -20,7 +20,7 @@ The current design bias is:
 
 Current implementation slice:
 
-- mod metadata, code namespace, and resources now consistently use `settlement_roads`
+- mod metadata, code namespace, and resources now consistently use `better_settlement_roads`
 - legacy `fissionreactor` sources, assets, tests, and dependency baggage have been removed
 - core planner/domain/storage scaffolding exists in `src/main/kotlin`
 - deterministic synthetic scenarios now drive both debug commands and GameTests
@@ -30,7 +30,7 @@ Current implementation slice:
 - Production roads build once per stable segment ID. A rebuild retains completed IDs even when source structures leave the observed area; a later edit or missing road is not repaired. Placement replaces only a narrow natural-ground list, skips block entities and unloaded footprint chunks, and checks the observed state again before writing. This protects ordinary construction but cannot distinguish player-placed dirt from generated dirt. Existing persisted `test_landmark` nodes are retained for operator review but do not enter production planning; ordinary magenta concrete no longer creates new landmarks. No automatic deletion of old debug nodes is performed.
 - deterministic JVM tests cover clustering, rings, dry-route selection, palette choice, chunk indexing, and save-data round trips; isolated bridge tests deliberately enable the unsupported flag
 - in-world GameTests retain isolated bridge-placement scaffolding alongside supported dry routing and rerun-idempotence coverage; they do not establish working bridge support
-- debug commands register `/settlement_roads debug spawn_scenario`, `plan_here`, `place_here`, and `clear_here`
+- debug commands register `/better_settlement_roads debug spawn_scenario`, `plan_here`, `place_here`, and `clear_here`
 
 Immediate implementation entry points:
 
@@ -44,9 +44,9 @@ For modpack and mod discussion, playtest feedback, and bug reports, join the [Be
 
 ## Canonical identity
 
-- Repository and release artifact: `settlement-roads`
-- Mod ID and resource namespace: `settlement_roads`
-- Java package: `com.bettercontent.settlementroads`
+- Repository and release artifact: `better-settlement-roads`
+- Mod ID and resource namespace: `better_settlement_roads`
+- Java package: `com.bettercontent.bettersettlementroads`
 - Validation: `./gradlew verifyFull`
 
 This normalization is a clean break. Worlds, configuration files, and integrations created for earlier identities are not migrated or aliased.
