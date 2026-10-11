@@ -1,5 +1,11 @@
 # Better Settlement Roads
 
+## Scope and authority
+
+This repository owns its mod-specific behavior and authoring inputs. Read [local instructions](AGENTS.md)
+and the [shared documentation/policy index](../../better-content-modpack/docs/README.md).
+
+
 Deterministic, scenario-driven settlement road planning for Forge 1.20.1.
 
 This repository contains the mod implementation and its execution docs:
