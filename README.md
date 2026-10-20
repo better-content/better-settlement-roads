@@ -1,5 +1,16 @@
 # Better Settlement Roads
 
+## Playtest logging
+
+`bc.playtest.better_settlement_roads.network` observes rebuild/clear outcomes from already
+computed plans; `.placement` separates segment markers from actual block/wall write counts.
+A marked segment with zero writes is not reported as every block placed or automatic repair.
+No additional scans, chunk loads or per-block stream is introduced. DEBUG/TRACE share 120/minute
+(burst 20), 256 keys and 2,048-character records, with 30-second summaries. Startup INFO reports
+loaded version/mode/limits; unavailable source identity is `UNKNOWN`. Stop/disconnect clears
+transient keys without rearming process allowances. Pure emitter/contracts supplement native
+placement/idempotence tests, not representative natural-world or visual acceptance.
+
 ## Scope and authority
 
 This repository owns its mod-specific behavior and authoring inputs. Read [local instructions](AGENTS.md)

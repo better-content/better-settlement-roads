@@ -131,7 +131,12 @@ object SettlementRoadsRuntime {
             )
         }
 
-        return status(level)
+        val result = status(level)
+        val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
+        if (log.enabled("network")) log.event("network", "roads.rebuild", "server", "planned", "observed_chunks",
+            { com.bettercontent.bettersettlementroads.diagnostics.PlaytestLog.fields("known_structures", result.knownStructures,
+                "active_structures", result.activeStructures, "connections", result.connections, "retained_segments", result.appliedSegments) })
+        return result
     }
 
     fun placeAvailable(level: ServerLevel): PlacementResult {
@@ -153,6 +158,11 @@ object SettlementRoadsRuntime {
             }
         }
 
+        if (placement.appliedSegments.isNotEmpty()) {
+            val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
+            if (log.enabled("placement")) com.bettercontent.bettersettlementroads.diagnostics.FeatureTelemetry.placement(
+                log, placement.appliedSegments.size, placement.placedBlocks, placement.placedWallBlocks)
+        }
         return placement
     }
 
@@ -163,6 +173,8 @@ object SettlementRoadsRuntime {
                 worldNetwork = PlannedRoadNetwork()
             )
         }
+        val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
+        if (log.enabled("network")) log.event("network", "roads.clear", "server", "cleared", "operator_request", null)
     }
 
     fun markDirty(level: ServerLevel) {
