@@ -12,8 +12,9 @@ public final class FeatureTelemetryTest {
             public boolean enabled(String category, String level) { return true; }
             public void write(String category, String level, String message) { records.add(message); }
         }, () -> 0L, new Properties());
-        FeatureTelemetry.placement(log, 1, 0, 0);
+        FeatureTelemetry.placement(log, PlaytestLog.Context.server("minecraft:overworld", 42), 1, 0, 0);
         if (records.size() != 1 || !records.get(0).contains("result=segments_marked reason=batch_complete")
+                || !records.get(0).contains("dimension=minecraft:overworld") || !records.get(0).contains("tick=42")
                 || records.get(0).contains("subject=") || records.get(0).contains("pos=")
                 || records.get(0).contains("player=") || records.get(0).contains("payload=")) {
             throw new AssertionError(records.toString());

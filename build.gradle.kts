@@ -1,4 +1,5 @@
 import javax.xml.parsers.DocumentBuilderFactory
+import java.util.UUID
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -41,6 +42,9 @@ kotlin {
     jvmToolchain(17)
 }
 
+// Nonshipping source fixture identity, never a gameplay/diagnostic correlation ID.
+val nativeGameTestDirectory = layout.buildDirectory.dir("gametest/${UUID.randomUUID()}").get().asFile
+
 minecraft {
     mappings("official", minecraftVersion)
     copyIdeResources = true
@@ -67,7 +71,9 @@ minecraft {
             arg("--nogui")
         }
 
-        create("gameTestServer")
+        create("gameTestServer") {
+            workingDirectory(nativeGameTestDirectory)
+        }
 
         create("data") {
             args(
@@ -87,7 +93,7 @@ sourceSets.named("main") {
 val syncGameTestStructures by tasks.registering(Copy::class) {
     from("gameteststructures")
     from("src/main/resources/gameteststructures")
-    into(file("run/gameteststructures"))
+    into(nativeGameTestDirectory.resolve("gameteststructures"))
 }
 
 repositories {
@@ -255,6 +261,8 @@ tasks.register("verifyFast") {
     description = "Runs the fast deterministic verification lane."
     dependsOn(tasks.named("check"))
 }
+
+apply(from = "gradle/native-gametest-fixture.gradle")
 
 tasks.register("verifyFull") {
     group = "verification"

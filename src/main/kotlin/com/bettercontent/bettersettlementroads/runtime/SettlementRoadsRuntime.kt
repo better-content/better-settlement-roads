@@ -133,7 +133,7 @@ object SettlementRoadsRuntime {
 
         val result = status(level)
         val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
-        if (log.enabled("network")) log.event("network", "roads.rebuild", "server", "planned", "observed_chunks",
+        if (log.enabled("network")) log.debug("network", "roads.rebuild", context(level), "planned", "observed_chunks",
             { com.bettercontent.bettersettlementroads.diagnostics.PlaytestLog.fields("known_structures", result.knownStructures,
                 "active_structures", result.activeStructures, "connections", result.connections, "retained_segments", result.appliedSegments) })
         return result
@@ -161,10 +161,13 @@ object SettlementRoadsRuntime {
         if (placement.appliedSegments.isNotEmpty()) {
             val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
             if (log.enabled("placement")) com.bettercontent.bettersettlementroads.diagnostics.FeatureTelemetry.placement(
-                log, placement.appliedSegments.size, placement.placedBlocks, placement.placedWallBlocks)
+                log, context(level), placement.appliedSegments.size, placement.placedBlocks, placement.placedWallBlocks)
         }
         return placement
     }
+
+    private fun context(level: ServerLevel) = com.bettercontent.bettersettlementroads.diagnostics.PlaytestLog.Context.server(
+        level.dimension().location().toString(), level.gameTime)
 
     fun clear(level: ServerLevel) {
         SettlementRoadsSavedData.get(level).update { current ->
@@ -174,7 +177,7 @@ object SettlementRoadsRuntime {
             )
         }
         val log = com.bettercontent.bettersettlementroads.PlaytestDiagnostics.LOG
-        if (log.enabled("network")) log.event("network", "roads.clear", "server", "cleared", "operator_request", null)
+        if (log.enabled("network")) log.debug("network", "roads.clear", context(level), "cleared", "operator_request", null)
     }
 
     fun markDirty(level: ServerLevel) {

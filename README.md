@@ -1,10 +1,22 @@
 # Better Settlement Roads
 
+## Native fixture verification
+
+Each Gradle invocation selects a fresh nonshipping `build/gametest/<uuid>` directory in the actual
+ForgeGradle GameTest RunConfig; structure copies and native log readers use that same directory.
+Ordinary developer `run`, visual/data roots and prior fixtures are never reset, relocated or merged.
+`verifyFast` covers isolated-directory rejection, absent-only settings preparation, existing-settings
+preservation and synthetic ERROR/FATAL rejection. `verifyFull` prepares defaults-only
+`server.properties` when absent and rejects ERROR/FATAL in both actual native latest/debug logs,
+rather than relying on test counts. Retain complete build trees/evidence across handoffs.
+
 ## Playtest logging
 
 `bc.playtest.better_settlement_roads.network` observes rebuild/clear outcomes from already
 computed plans; `.placement` separates segment markers from actual block/wall write counts.
 A marked segment with zero writes is not reported as every block placed or automatic repair.
+Rebuild, placement and clear carry native dimension/game tick: the existing network is one saved
+state per dimension, with no native revision ID to invent. No diagnostic counter/ledger is added.
 No additional scans, chunk loads or per-block stream is introduced. DEBUG/TRACE share 120/minute
 (burst 20), 256 keys and 2,048-character records, with 30-second summaries. Startup INFO reports
 loaded version/mode/limits; unavailable source identity is `UNKNOWN`. Stop/disconnect clears
