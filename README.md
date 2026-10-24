@@ -23,11 +23,7 @@ loaded version/mode/limits; unavailable source identity is `UNKNOWN`. Stop/disco
 transient keys without rearming process allowances. Pure emitter/contracts supplement native
 placement/idempotence tests, not representative natural-world or visual acceptance.
 
-## Scope and authority
-
-This repository owns its mod-specific behavior and authoring inputs. Read [local instructions](AGENTS.md)
-and the [shared documentation/policy index](../../better-content-modpack/docs/README.md).
-
+## Scope
 
 Deterministic, scenario-driven settlement road planning for Forge 1.20.1.
 
