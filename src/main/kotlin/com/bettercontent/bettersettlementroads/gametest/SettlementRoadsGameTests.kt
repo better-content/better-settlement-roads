@@ -174,6 +174,63 @@ object SettlementRoadsGameTests {
         helper.succeed()
     }
 
+    @JvmStatic
+    @GameTest(template = "blank")
+    fun registeredClusteredPlacementCodecPreservesFieldsAndNativeLevelSeed(helper: GameTestHelper) {
+        val ops = com.mojang.serialization.JsonOps.INSTANCE
+        val codec = net.minecraft.world.level.levelgen.structure.placement.StructurePlacement.CODEC
+        val authored = com.google.gson.JsonParser.parseString("""
+            {"type":"better_settlement_roads:clustered_spread","salt":381311,
+             "locate_offset":[3,0,-2],"cluster_spacing":64,"cluster_radius":8,"baseline_spacing":64}
+        """.trimIndent())
+        val placement = codec.parse(ops, authored).result().orElseThrow()
+        helper.assertTrue(placement is com.bettercontent.bettersettlementroads.worldgen.ClusteredSpreadStructurePlacement,
+            "Registered dispatch codec must resolve our native placement type")
+        placement as com.bettercontent.bettersettlementroads.worldgen.ClusteredSpreadStructurePlacement
+        helper.assertTrue(placement.type() === com.bettercontent.bettersettlementroads.worldgen.SettlementRoadsWorldgen.CLUSTERED_SPREAD.get(),
+            "Decoded placement must use the registered type")
+        helper.assertTrue(placement.clusterSpacing() == 64 && placement.clusterRadius() == 8 && placement.baselineSpacing() == 64,
+            "Native placement codec must preserve authored fields")
+        val encoded = codec.encodeStart(ops, placement).result().orElseThrow()
+        helper.assertTrue(encoded.asJsonObject.get("salt").asInt == authored.asJsonObject.get("salt").asInt, "Native codec must preserve the placement salt")
+        helper.assertTrue(encoded.asJsonObject.get("type").asString == "better_settlement_roads:clustered_spread",
+            "Dispatch encoding must retain the registered type ID")
+        helper.assertTrue(encoded.asJsonObject.getAsJsonArray("locate_offset") == authored.asJsonObject.getAsJsonArray("locate_offset"),
+            "Base placement codec fields must round-trip too")
+        val decodedAgain = codec.parse(ops, encoded).result().orElseThrow()
+        helper.assertTrue(codec.encodeStart(ops, decodedAgain).result().orElseThrow() == encoded,
+            "Actual dispatch codec must round-trip stably")
+        val invalid = authored.deepCopy().asJsonObject.also { it.addProperty("cluster_radius", 0) }
+        val invalidRejected = try {
+            codec.parse(ops, invalid).error().isPresent
+        } catch (_: IllegalArgumentException) {
+            true // The placement constructor also enforces geometry after codec partial decoding.
+        }
+        helper.assertTrue(invalidRejected, "Codec must reject an out-of-range radius")
+
+        val level = helper.level
+        val generator = level.chunkSource.generator
+        fun state(seed: Long) = net.minecraft.world.level.chunk.ChunkGeneratorStructureState.createForFlat(
+            level.chunkSource.randomState(), seed, generator.biomeSource,
+            java.util.stream.Stream.empty<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.StructureSet>>())
+        val seeds = listOf(level.seed, level.seed xor 0x5EEDL)
+        val fields = seeds.map { seed ->
+            val nativeState = state(seed)
+            val selected = mutableSetOf<Pair<Int, Int>>()
+            for (x in -64 until 64) for (z in -64 until 64) {
+                val expected = com.bettercontent.bettersettlementroads.worldgen.ClusteredSpreadPolicy.site(
+                    seed, x, z, authored.asJsonObject.get("salt").asInt, 0, placement.clusterSpacing(), placement.clusterRadius(), placement.baselineSpacing(), 2) != null
+                val actual = decodedAgain.isStructureChunk(nativeState, x, z)
+                helper.assertTrue(actual == expected, "Native placement must forward its structure state's level seed at $x,$z")
+                if (actual) selected += x to z
+            }
+            helper.assertTrue(selected.isNotEmpty() && selected.size < 128 * 128, "Native field must exercise admitted and rejected chunks")
+            selected
+        }
+        helper.assertTrue(fields[0] != fields[1], "Changing the native structure-state seed must change the placement field")
+        helper.succeed()
+    }
+
     private fun spawnAndPlace(
         helper: GameTestHelper,
         scenarioId: DebugScenarioId
